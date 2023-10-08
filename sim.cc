@@ -7,6 +7,8 @@
 #include "physics.hh"
 #include "action.hh"
 
+#include<chrono>
+
 int main(int argc, char** argv)
 {
     // Construct the default run manager
@@ -38,7 +40,15 @@ int main(int argc, char** argv)
     else{
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
+
+        //Let's also measure the runtime
+        auto start = std::chrono::high_resolution_clock::now();
         UImanager->ApplyCommand(command + fileName);
+        auto end = std::chrono::high_resolution_clock::now();
+
+        std::chrono::duration<double> elapsed = end - start;
+
+        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     }
 
 

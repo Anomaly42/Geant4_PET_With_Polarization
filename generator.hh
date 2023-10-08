@@ -10,6 +10,8 @@
 #include "G4Geantino.hh"
 #include "G4IonTable.hh"
 
+#include<random>
+
 class MyPrimaryGenerator: public G4VUserPrimaryGeneratorAction
 {
 public:

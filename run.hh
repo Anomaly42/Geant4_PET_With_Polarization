@@ -1,6 +1,9 @@
 #ifndef RUN_HH
 #define RUN_HH
 
+#include<random>
+#include<string>
+
 #include "G4UserRunAction.hh"
 #include "G4AnalysisManager.hh"
 #include "G4RootAnalysisManager.hh"

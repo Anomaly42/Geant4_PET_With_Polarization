@@ -3,7 +3,7 @@
 
 MyPrimaryGenerator::MyPrimaryGenerator(){
     particleNumber = 1;
-    fParticleGun = new G4ParticleGun(particleNumber); //two particles per event
+    fParticleGun = new G4ParticleGun(particleNumber); 
 
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName="geantino"; //default particle, previously a proton
@@ -48,7 +48,10 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event* anEvent){
     G4double sampleZ = 5*mm;
 
     //Random particle time of decay using uniform random
-    G4double particleTime = G4UniformRand()*s; //Acquisition time = 1 second
+    std::random_device rd;
+    std::uniform_real_distribution<long double> dist(0.0, 1.0);
+
+    G4double particleTime = (G4double)dist(rd)*s; //Acquisition time = 1 second
     fParticleGun->SetParticleTime(particleTime);
 
     //Randomize particle position

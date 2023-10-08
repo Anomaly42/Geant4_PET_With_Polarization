@@ -14,6 +14,8 @@ MyRunAction::MyRunAction()
     man->CreateNtupleDColumn("fPolX");
     man->CreateNtupleDColumn("fPolY");
     man->CreateNtupleDColumn("fPolZ");
+    man->CreateNtupleSColumn("sName");
+
 
     man->FinishNtuple(0);
 
@@ -40,7 +42,14 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
     std::stringstream strRunID;
     strRunID << runID;
 
-    man->OpenFile("output" + strRunID.str() + ".root");
+    man->OpenFile("hello" + strRunID.str() + ".root");
+    //Let's use random numbers for the output file name
+
+    // std::random_device rd;
+
+    // std::uniform_int_distribution<int> dist(0, 1000000);
+
+    // man->OpenFile("output" + std::to_string(dist(rd)) + ".root");
 
 
 }

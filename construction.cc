@@ -64,10 +64,11 @@ void MyDetectorConstruction::DefineMaterials(){
     G4double rindexAerogel[2] = {1.1, 1.1};
 
     G4MaterialPropertiesTable *mptAerogel = new G4MaterialPropertiesTable();
-    mptAerogel->AddProperty("RINDEX", energy, rindexAerogel, 2); //DOUBT: momentum and energy of massless particles have a factor of c. where is it accounted for?
+    mptAerogel->AddProperty("RINDEX", energy, rindexAerogel, 2);
 
     Aerogel->SetMaterialPropertiesTable(mptAerogel);
 
+//DOUBT: momentum and energy of massless particles have a factor of c. where is it accounted for?
     //NaI
     Na = nist->FindOrBuildElement("Na");
     I = nist->FindOrBuildElement("I");
@@ -187,12 +188,12 @@ void MyDetectorConstruction::ConstructPET(){
 
     solidPETBox2 = new G4Box("solidPETBox2", 10*mm, 2*mm, 2*mm);
     logicPETBox2 = new G4LogicalVolume(solidPETBox2, worldMat, "logicPETBox2");
-    // physPETBox2 = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicPETBox2, "physPETBox2", logicPETBox1, false, 0, true);
 
     G4int repeatX = 30, repeatY = 8, repeatZ = 8;
     for (G4int j = -(G4int)(repeatY/2); j < (G4int)(repeatY/2); ++j){
         for (G4int k = - (G4int)(repeatZ/2); k < (G4int)(repeatZ/2); ++k){
-            physPETBox2 = new G4PVPlacement(0, G4ThreeVector(0, 2.25 +  j*4.5*mm, 2.25 + k*4.5*mm), logicPETBox2, "physPETBox" + to_string(repeatY*j + k), logicPETBox1, false, 0, true);
+            physPETBox2 = new G4PVPlacement(0, G4ThreeVector(0, 2.25 +  j*4.5*mm, 2.25 + k*4.5*mm),
+            logicPETBox2, "physPETBox" + to_string(repeatY*j + k), logicPETBox1, false, 0, true);
         }
     }
 
@@ -202,13 +203,14 @@ void MyDetectorConstruction::ConstructPET(){
         G4RotationMatrix *detectorRot = new G4RotationMatrix();
         detectorRot->rotateZ(angle_rad*rad);
 
-        physPETBox1 = new G4PVPlacement(detectorRot, G4ThreeVector(radiusPET*mm*cos(-angle_rad), radiusPET*mm*sin(-angle_rad), 0), logicPETBox1, "physPETBox1", logicWorld, false, 0, true);
+        physPETBox1 = new G4PVPlacement(detectorRot,
+        G4ThreeVector(radiusPET*mm*cos(-angle_rad), radiusPET*mm*sin(-angle_rad), 0),
+        logicPETBox1, "physPETBox1", logicWorld, false, 0, true);
     }
 
     solidPETSample = new G4Box("solidPETSample", sampleX, sampleY, sampleZ);
     logicPETSample = new G4LogicalVolume(solidPETSample, H2O, "logicPETSample");
     physPETSample = new G4PVPlacement(0, G4ThreeVector(0, 0, 0), logicPETSample, "physPETSample", logicWorld, false, 0, true);
-
 }
 
 G4VPhysicalVolume *MyDetectorConstruction::Construct(){

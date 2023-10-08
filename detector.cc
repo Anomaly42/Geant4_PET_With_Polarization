@@ -1,4 +1,5 @@
 #include "detector.hh"
+#include<random>
 
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name){
     quEff = new G4PhysicsFreeVector();
@@ -29,37 +30,21 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     G4StepPoint *preStepPoint = aStep->GetPreStepPoint(); //WARNING, be careful about pre and post step for hadrons; photons are fine
     G4StepPoint *postStepPoint = aStep->GetPostStepPoint();
 
+    G4String particleName = track->GetDefinition()->GetParticleName();
+
     G4ThreeVector posPhoton = preStepPoint->GetPosition();
     G4ThreeVector momPhoton = postStepPoint->GetMomentum();
     G4double wlen = (1.239814939*eV/momPhoton.mag())*1E+03; //wavelength in nm
     G4double energykeV = (1.239814939/wlen);
 
     G4double time = preStepPoint->GetGlobalTime();
-    // G4cout << "TIMEEEEEEEEEEEEEEEEEEE" << G4endl;
-    // G4cout << time/s << G4endl;
-
-    // G4cout << "WLEMNNNNNNNNNNNNNNNNNN" << G4endl;
-    // G4cout << wlen << G4endl;
-
-
-    // G4cout << "Energyyyyyyyy (keV)" << G4endl;
-    // G4cout << energykeV << G4endl;
-
     G4ThreeVector polarization = preStepPoint->GetPolarization();
-    // G4cout << "Polarization: " << polarization << "At: " << preStepPoint->GetPosition() << G4endl;
-    // G4cout << "Time: " << time << G4endl;
-
-
     const G4VTouchable *touchable = preStepPoint->GetTouchable();
 
     G4int copyNo = touchable->GetVolume()->GetCopyNo();
 
-    //G4cout << "Copy Number: " << copyNo << G4endl;
-
     G4VPhysicalVolume *physVol = touchable->GetVolume();
     G4ThreeVector posDetector = physVol->GetTranslation();
-
-    // G4cout << "Detector Position: " << posDetector << G4endl;
 
     G4int evt = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
@@ -74,10 +59,15 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     man->FillNtupleDColumn(0, 6, (G4double)polarization[0]);
     man->FillNtupleDColumn(0, 7, (G4double)polarization[1]);
     man->FillNtupleDColumn(0, 8, (G4double)polarization[2]);
+    
+    man->FillNtupleSColumn(0, 9, particleName);
+
 
 
     man->AddNtupleRow(0);
 
+    // G4cout << "Time: "  << time << G4endl;
+    // G4cout << sizeof(time) << G4endl;
     // G4cout << "Wavelength: " << wlen << G4endl;
     // G4cout << "Quantum Efficiency: " << quEff->Value(wlen*nm) << G4endl;
 
