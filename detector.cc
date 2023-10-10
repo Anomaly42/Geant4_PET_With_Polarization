@@ -2,22 +2,23 @@
 #include<random>
 
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name){
-    quEff = new G4PhysicsFreeVector();
+    // FIXED: eff.dat file not being in the directory was causing problems
+    // quEff = new G4PhysicsFreeVector();
 
-    std::ifstream datafile;
-    datafile.open("eff.dat");
+    // std::ifstream datafile;
+    // datafile.open("eff.dat");
 
-    while (1) {
-        G4double wlen, eff;
-        datafile >> wlen >> eff;
+    // while (1) {
+    //     G4double wlen, eff;
+    //     datafile >> wlen >> eff;
 
-        if (datafile.eof()) break;
+    //     if (datafile.eof()) break;
 
-        G4cout << wlen << " " << eff << G4endl;
-        quEff->InsertValues(wlen*nm, eff/100.); //effDciency is in %
-    }
+    //     G4cout << wlen << " " << eff << G4endl;
+    //     quEff->InsertValues(wlen*nm, eff/100.); //effDciency is in %
+    // }
 
-    datafile.close();
+    // datafile.close();
     // quEff.SetSpline(false); //use only linear interpolation
 }
 MySensitiveDetector::~MySensitiveDetector(){}
